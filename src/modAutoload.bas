@@ -29,8 +29,8 @@ End Sub
 '自动加载
 Sub auto_open()
     Dim xls As clsExcel
-    Set xls = Unit.Excel
-    xls.DeleteCommandbar APP_NAME & APP_VERSION
+    Set xls = Util.Excel
+    xls.DeleteCommandbar APP_NAME
     xls.DeleteControl APP_NAME, xls.GetMenuRoot
     AutoLoad_LoadTools xls
     Set xls = Nothing
@@ -39,8 +39,8 @@ End Sub
 '自动卸载
 Sub auto_close()
     Dim xls As clsExcel
-    Set xls = Unit.Excel
-    xls.DeleteCommandbar APP_NAME & APP_VERSION
+    Set xls = Util.Excel
+    xls.DeleteCommandbar APP_NAME
     xls.DeleteControl APP_NAME, xls.GetMenuRoot
     Set xls = Nothing
 End Sub

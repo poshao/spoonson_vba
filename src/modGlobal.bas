@@ -11,7 +11,7 @@ Option Explicit
 
 '全局变量声明
 '===============================================================================
-Dim m_unit As clsUnit
+Dim m_util As clsUtil
 
 '全局函数声明
 '===============================================================================
@@ -19,11 +19,11 @@ Dim m_unit As clsUnit
 '全局属性声明
 '===============================================================================
 '工具集合
-Public Property Get Unit() As clsUnit
-    If m_unit Is Nothing Then
-        Set m_unit = New clsUnit
+Public Property Get Util() As clsUtil
+    If m_util Is Nothing Then
+        Set m_util = New clsUtil
     End If
-    Set Unit = m_unit
+    Set Util = m_util
 End Property
 
 '内置函数

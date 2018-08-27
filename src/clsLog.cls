@@ -14,6 +14,11 @@ Attribute VB_Exposed = False
 '
 '初始文件夹路径为用户文件夹下的Logs文件夹
 '默认文件名为 日期+日志名称+.log
+'使用方法
+'Dim log As New clsLog
+'log.LogFolder = "C:\logs\"
+'log.Filename = "log"
+'log.Info "test"
 
 Option Explicit
 Dim m_strLogFolder As String

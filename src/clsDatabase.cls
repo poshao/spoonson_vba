@@ -63,9 +63,9 @@ Public Function ConnectParadox(ByVal strPath As String) As Connection
 End Function
 
 'MySQL连接--?
-Public Function ConnectMySQL(ByVal strHost As String, ByVal strUser As String, ByVal strPasswd As String, ByVal strDbName As String, Optional ByVal strPort As String = "3306") As Connection
+Public Function ConnectMySQL(ByVal strHost As String, ByVal strUser As String, ByVal strPasswd As String, ByVal strDBName As String, Optional ByVal strPort As String = "3306") As Connection
     Dim strConnect As String
-    strConnect = "Server=" & strHost & ";Port=" & strPort & ";Database=" & strDbName & ";Uid=" & strUser & ";Pwd=" & strPort & ";"
+    strConnect = "Server=" & strHost & ";Port=" & strPort & ";Database=" & strDBName & ";Uid=" & strUser & ";Pwd=" & strPort & ";"
     Set ConnectMySQL = Connect(strConnect)
 End Function
 
@@ -75,6 +75,13 @@ Public Function ConnectEXCEL(ByVal strFile As String, ByVal bHasHeader As Boolea
     strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & strFile & _
                 ";Extended Properties=""Excel 12.0 Xml;HDR=" & IIf(bHasHeader, "YES", "NO") & ";IMEX=1"";"
     Set ConnectEXCEL = Connect(strConnect)
+End Function
+
+'连接SQL server
+Public Function ConnectSQLServer(strHost As String, strUsername As String, strPasswd As String, strDBName As String) As Connection
+    Dim strConnect As String
+    strConnect = "Driver={SQL Server};Server=" & strHost & ";Database=" & strDBName & ";Uid=" & strUsername & ";Pwd=" & strPasswd & ";"
+    Set ConnectSQLServer = Connect(strConnect)
 End Function
 
 'select查询(只读)
@@ -210,11 +217,6 @@ Public Sub Export_Excel(sheet, sql As String)
     End If
     rs.Close
 End Sub
-
-Public Function GetDbByName(strDbName As String) As clsDatabase
-    Dim db As New clsDatabase
-
-End Function
 
 Private Sub Class_Initialize()
     Set m_conn = New ADODB.Connection

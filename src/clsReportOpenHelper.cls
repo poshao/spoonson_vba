@@ -77,11 +77,10 @@ Public Function OpenS95s(sheet As Worksheet, Optional strPaths) As Boolean
     Application.ScreenUpdating = False
     
     For Each strPath In strPaths
-        Workbooks.OpenText Filename:=strPath, Origin:=936, StartRow:=9, DataType:=xlFixedWidth, FieldInfo:=Array( _
-                    Array(0, 1), Array(7, 1), Array(18, 1), Array(25, 2), Array(51, 1), Array(55, 1), Array(68, _
-                    1), Array(77, 2), Array(103, 1), Array(107, 1), Array(118, 1), Array(122, 1), Array(131, 1) _
-                    , Array(138, 1), Array(146, 1), Array(155, 1), Array(164, 1), Array(173, 1), Array(182, 1), _
-                    Array(203, 1), Array(219, 1), Array(228, 1)), TrailingMinusNumbers:=True
+        Workbooks.OpenText Filename:=strPath, Origin:=936, StartRow:=9, DataType:=xlFixedWidth, FieldInfo:=Array(Array(0, 1), Array(7, 1), Array(18, 2), Array(25, 2), Array(51, 1), Array(55, 1), Array(68, _
+                    1), Array(77, 1), Array(103, 1), Array(107, 1), Array(118, 1), Array(123, 1), Array(133, 1) _
+                    , Array(140, 1), Array(148, 1), Array(157, 1), Array(166, 1), Array(175, 1), Array(184, 1), _
+                    Array(205, 1), Array(221, 1), Array(230, 1)), TrailingMinusNumbers:=True
                     
         Range("A1:U" & Range("O1048576").End(xlUp).Row).Copy sheet.Range("O1048576").End(xlUp).Offset(1, -14)
         ActiveWorkbook.Close False
@@ -128,7 +127,7 @@ Public Function OpenS96s(sheet As Worksheet, Optional strPaths) As Boolean
             Space:=False, Other:=False, FieldInfo:=Array(Array(1, 1), Array(2, 1), Array( _
             3, 1), Array(4, 1), Array(5, 1), Array(6, 1), Array(7, 1), Array(8, 1), Array(9, 1), Array(10 _
             , 1), Array(11, 1), Array(12, 1), Array(13, 1), Array(14, 1), Array(15, 1), Array(16, 1), _
-            Array(17, 1), Array(18, 1), Array(19, 1), Array(20, 2), Array(21, 1), Array(22, 1), Array( _
+            Array(17, 1), Array(18, 1), Array(19, 2), Array(20, 2), Array(21, 1), Array(22, 1), Array( _
             23, 1), Array(24, 1), Array(25, 1), Array(26, 1), Array(27, 1), Array(28, 1), Array(29, 1), _
             Array(30, 1), Array(31, 1), Array(32, 1), Array(33, 1), Array(34, 1), Array(35, 1), Array( _
             36, 1), Array(37, 1), Array(38, 1), Array(39, 1), Array(40, 1)), TrailingMinusNumbers _
@@ -175,12 +174,12 @@ Public Function Open472Ds(sheet As Worksheet, Optional strPaths) As Boolean
         Workbooks.OpenText Filename:=strPath, Origin:=936, StartRow:=1, DataType:=xlDelimited, TextQualifier:= _
                         xlDoubleQuote, ConsecutiveDelimiter:=True, Tab:=True, Semicolon:=False, _
                         Comma:=False, Space:=False, Other:=False, FieldInfo:=Array(Array(1, 1), _
-                        Array(2, 1), Array(3, 1), Array(4, 1), Array(5, 1), Array(6, 1), Array(7, 1), Array(8, 1), _
+                        Array(2, 1), Array(3, 2), Array(4, 2), Array(5, 1), Array(6, 1), Array(7, 1), Array(8, 1), _
                         Array(9, 1), Array(10, 1), Array(11, 1), Array(12, 1), Array(13, 1), Array(14, 1), Array(15 _
                         , 1), Array(16, 1), Array(17, 1), Array(18, 1), Array(19, 1), Array(20, 1), Array(21, 1), _
                         Array(22, 1), Array(23, 1), Array(24, 1), Array(25, 1), Array(26, 1), Array(27, 1), Array( _
                         28, 1), Array(29, 1), Array(30, 1), Array(31, 1), Array(32, 1), Array(33, 1), Array(34, 1), _
-                        Array(35, 1), Array(36, 1), Array(37, 1), Array(38, 1), Array(39, 1), Array(40, 1), Array( _
+                        Array(35, 2), Array(36, 1), Array(37, 1), Array(38, 1), Array(39, 1), Array(40, 1), Array( _
                         41, 1), Array(42, 1), Array(43, 1), Array(44, 1), Array(45, 1), Array(46, 1)), _
                         TrailingMinusNumbers:=True
         Range("A1:AS" & Range("A1048576").End(xlUp).Row).Copy sheet.Range("A1048576").End(xlUp).Offset(1, 0)
@@ -490,10 +489,103 @@ End Function
 
 '打开OLU报表
 Public Function OpenOLUs(sheet As Worksheet, Optional strPaths) As Boolean
+    Dim strPath
+    Dim strTemp As String
+    Dim rngDelete As Range
+    Dim i As Long
     
+    If VBA.IsMissing(strPaths) Then
+        strPaths = dig.GetOpenFilename("OLU文件|*.txt|所有文件|*.*", "请选择OLU文件", "", True)
+        If TypeName(strPaths) = "String" Then Exit Function
+    End If
+    
+    Application.ScreenUpdating = False
+    For Each strPath In strPaths
+        Workbooks.OpenText Filename:=strPath, Origin:=936, StartRow:= _
+                2, DataType:=xlDelimited, TextQualifier:=xlDoubleQuote, _
+                ConsecutiveDelimiter:=False, Tab:=False, Semicolon:=False, Comma:=True _
+                , Space:=False, Other:=False, FieldInfo:=Array(Array(1, 2), Array(2, 2), _
+                Array(3, 2), Array(4, 2), Array(5, 2), Array(6, 2), Array(7, 1), Array(8, 2), Array(9, 2), _
+                Array(10, 2), Array(11, 1), Array(12, 1), Array(13, 1), Array(14, 2), Array(15, 1), Array( _
+                16, 1), Array(17, 1), Array(18, 1), Array(19, 2), Array(20, 2), Array(21, 1), Array(22, 1), _
+                Array(23, 2), Array(24, 1), Array(25, 1)), TrailingMinusNumbers:=True
+        
+        Range("A1:Y" & Range("B1048576").End(xlUp).Row).Copy sheet.Range("B1048576").End(xlUp).Offset(1, -1)
+        ActiveWorkbook.Close False
+    Next
+    '删除无效数据
+    sheet.Activate
+    Rows(1).Delete
+    
+    For i = 2 To Range("B1048576").End(xlUp).Row
+        strTemp = VBA.Trim(Cells(i, "B").Formula)
+        If strTemp = "SONO" Then
+            If rngDelete Is Nothing Then
+                Set rngDelete = Cells(i, "A")
+            Else
+                Set rngDelete = Union(Cells(i, "A"), rngDelete)
+            End If
+        End If
+    Next
+    If rngDelete Is Nothing = False Then rngDelete.EntireRow.Delete
+    Application.ScreenUpdating = True
+    
+    OpenOLUs = True
 End Function
 
 '打开RZT报表
 Public Function OpenRZTs(sheet As Worksheet, Optional strPaths) As Boolean
 
+End Function
+
+'打开RZO报表
+Public Function OpenRZOs(sheet As Worksheet, Optional strPaths) As Boolean
+    Dim strPath
+    Dim strTemp As String
+    Dim rngDelete As Range
+    Dim i As Long
+    
+    If VBA.IsMissing(strPaths) Then
+        strPaths = dig.GetOpenFilename("OLU文件|*.txt|所有文件|*.*", "请选择OLU文件", "", True)
+        If TypeName(strPaths) = "String" Then Exit Function
+    End If
+    
+    Application.ScreenUpdating = False
+    For Each strPath In strPaths
+'        Workbooks.OpenText Filename:=strPath, Origin:=936, StartRow:= _
+'                3, DataType:=xlDelimited, TextQualifier:=xlDoubleQuote, _
+'                ConsecutiveDelimiter:=True, Tab:=False, Semicolon:=False, Comma:=False _
+'                , Space:=True, Other:=False, FieldInfo:=Array(Array(1, 2), Array(3, 2), _
+'                Array(10, 1), Array(23, 1), Array(30, 2), Array(36, 1), Array(49, 1), _
+'                Array(62, 1), Array(65, 2), Array(67, 2), Array(75, 1), Array(88, 1), _
+'                Array(101, 1), Array(107, 1), Array(113, 1), Array(119, 1), Array(125, 1), _
+'                Array(184, 2), Array(185, 2)), TrailingMinusNumbers:=True
+        
+        Workbooks.OpenText Filename:=strPath, Origin:=936, StartRow:= _
+                2, DataType:=xlDelimited, TextQualifier:=xlDoubleQuote, _
+                ConsecutiveDelimiter:=True, Tab:=True, Semicolon:=False, Comma:=False _
+                , Space:=False, Other:=False, FieldInfo:=Array(Array(1, 2), Array(2, 2), Array(3, 2), _
+                Array(15, 2), Array(30, 2), Array(65, 2), Array(67, 2), _
+                Array(184, 2), Array(185, 2)), TrailingMinusNumbers:=True
+        Range("A1:GE" & Range("B1048576").End(xlUp).Row).Copy sheet.Range("B1048576").End(xlUp).Offset(1, -1)
+        ActiveWorkbook.Close False
+    Next
+    '删除无效数据
+    sheet.Activate
+    Rows(1).Delete
+    
+    For i = 2 To Range("B1048576").End(xlUp).Row
+        strTemp = VBA.Trim(Cells(i, "B").Formula)
+        If strTemp = "BATCH NO" Or strTemp = vbNullString Then
+            If rngDelete Is Nothing Then
+                Set rngDelete = Cells(i, "A")
+            Else
+                Set rngDelete = Union(Cells(i, "A"), rngDelete)
+            End If
+        End If
+    Next
+    If rngDelete Is Nothing = False Then rngDelete.EntireRow.Delete
+    Application.ScreenUpdating = True
+    
+    OpenRZOs = True
 End Function

@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "clsUnit"
+Attribute VB_Name = "clsUtil"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -33,9 +33,9 @@ Public Property Get MessageBox() As clsMessageBox
     Set MessageBox = m_MsgBox
 End Property
 
-Public Property Get LOG() As clsLog
+Public Property Get log() As clsLog
     If m_Log Is Nothing Then Set m_Log = New clsLog
-    Set LOG = m_Log
+    Set log = m_Log
 End Property
 
 Public Property Get Excel() As clsExcel
@@ -83,56 +83,6 @@ Public Function GetDbByName(strName As String) As clsDatabase
     End If
     db.Close_connection
 End Function
-
-'导出框架代码
-Public Sub ExportAllCode(Optional strFolder As String = vbNullString)
-    Dim Comp As VBComponent
-    Dim strFilename As String
-    
-    If strFolder = vbNullString Then
-        strFolder = VBA.Environ$("userprofile") & "\git\VBA_COMMON"
-    End If
-    '仅导出标准模块及类模块
-    For Each Comp In ThisWorkbook.VBProject.VBComponents
-        Select Case Comp.Type
-        Case vbext_ct_StdModule '标准模块
-            strFilename = strFolder & "\" & Comp.Name & ".bas"
-            Comp.Export strFilename
-            Debug.Print "Export " & Comp.Name & " to " & strFilename
-        Case vbext_ct_ClassModule '类模块
-            strFilename = strFolder & "\" & Comp.Name & ".cls"
-            Comp.Export strFilename
-            Debug.Print "Export " & Comp.Name & " to " & strFilename
-        End Select
-    Next
-End Sub
-
-'版本号升级
-'修改末位版本号+1
-Public Sub UpgradeVersion()
-    Dim com As VBComponent
-    Dim i As Long, strLine As String
-    Dim strVersion As String, strVersionNew As String
-    Dim iStart As Integer, iEnd As Integer
-    Dim iPointPos As Integer
-    
-    Set com = ThisWorkbook.VBProject.VBComponents("modDefine")
-    For i = 1 To com.CodeModule.CountOfLines
-        strLine = com.CodeModule.Lines(i, 1)
-        If InStr(strLine, "APP_VERSION") > 0 Then
-            iStart = InStr(strLine, """") + 1
-            iEnd = InStrRev(strLine, """")
-            strVersion = Mid(strLine, iStart, iEnd - iStart)
-            iPointPos = InStrRev(strVersion, ".")
-            If iPointPos < 1 Then
-                Err.Raise 3001, Description:="无效版本号 : " & strVersion
-            End If
-            strVersionNew = Left(strVersion, iPointPos) & Val(Mid(strVersion, iPointPos + 1)) + 1
-            com.CodeModule.ReplaceLine i, Replace(strLine, strVersion, strVersionNew, Count:=1)
-            Exit For
-        End If
-    Next
-End Sub
 
 Private Sub Class_Terminate()
     Set m_File = Nothing

@@ -82,3 +82,8 @@ Function ImportCodes(Optional strFolder As String = vbNullString)
         End If
     Next
 End Function
+
+'я╟ур╦Ы©ь╪Ч
+Public Function FindFather()
+
+End Function
